@@ -4,10 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { SearchRoutingModule } from './search-routing.module';
 import { SearchComponent } from './pages/search/search.component';
-
+import { SourceLogoDirective } from '../../shared/directives/search/source-logo.directive';
 
 @NgModule({
-  declarations: [SearchComponent],
+  declarations: [SearchComponent, SourceLogoDirective],
   imports: [
     CommonModule,
     FormsModule,
