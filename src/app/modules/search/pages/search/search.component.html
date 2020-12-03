@@ -7,17 +7,50 @@
         </div>
 
         <div class="content column is-half is-offset-one-quarter is-align-content-center">
-            <form action="/results" method="post" id="input_form" autocomplete="off" class="mt-1">
+            <form autocomplete="off" [formGroup]="searchForm" (ngSubmit)="search()">
                 <div class="field has-addons">
-                    <div class="control is-expanded">
-                        <input class="input is-medium" type="search" placeholder="Buscar" name="search"
-                            autofocus="autofocus" required>
+                    <div class="control is-expanded is-medium" [ngClass]="{'is-loading': isLoading}">
+                        <input class="input is-medium" type="search" placeholder="Ingrese un parámetro de búsqueda" name="term"
+                            autofocus="autofocus" formControlName="term" [readonly]="isLoading">
+                        <p class="help is-danger mt-1"
+                            *ngIf="searchForm.get('term').hasError('required') && (searchForm.get('term').touched || searchForm.get('term').dirty)">
+                            Debe introducir un parámetro de búsqueda.
+                        </p>
                     </div>
                     <div class="control">
-                        <button class="button input is-medium is-info">Buscar</button>
+                        <input class="button input is-medium is-info" type="submit" value="Buscar"
+                            [disabled]="!searchForm.valid || isLoading">
                     </div>
                 </div>
             </form>
+        </div>
+
+        <div class="content column is-full py-4 is-align-content-center" *ngIf="showResults == 'success'">
+            <div class="card mb-4" *ngFor="let row of results">
+                <div class="card-content">
+                    <div class="media">
+                        <div class="media-left">
+                            <figure class="image is-64x64">
+                                <img [src]="row.img" alt="Placeholder image">
+                            </figure>
+                        </div>
+                        <div class="media-content">
+                            <p class="title is-4">{{row.name}}</p>
+                        </div>
+                    </div>
+
+                    <div class="content">
+                        <p class="mt-6"><strong>Tipo: </strong>{{row.type}}</p>
+                        <p><strong>Fuente: </strong>{{row.source}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="content column is-full py-4 is-align-content-center" *ngIf="showResults == 'error'">
+            <div class="notification is-info">
+                No se encontraron coincidencias, por favor intente de nuevo.
+            </div>
         </div>
     </div>
 
